@@ -5,3 +5,6 @@
 
 ## 趣味
 クラシックバレエ
+
+## 技術
+C, Java, Javascript, flutter, HTML/CSS
