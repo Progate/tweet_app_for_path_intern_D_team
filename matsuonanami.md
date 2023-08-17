@@ -8,3 +8,6 @@
 
 ## 技術
 C, Java, Javascript, flutter, HTML/CSS
+
+## 好きな食べ物
+焼肉
