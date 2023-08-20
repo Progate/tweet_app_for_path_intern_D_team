@@ -546,27 +546,20 @@ input[type="checkbox"] {
   object-fit: cover;
 }
 
-.user h2 {
+.user-info h2 {
   font-size: 20px;
   font-weight: 600;
   line-height: 1.2;
 }
 
-.user p {
+.user-info p {
   font-size: 13px;
-  margin-bottom: 15px;
 }
 
-.user a {
+.user-edit {
   color: #8899a6;
   text-decoration: underline;
   font-weight: 200;
-}
-
-.user span {
-  color: #afb6bf;
-  font-weight: 200;
-  padding: 0 6px 0 8px;
 }
 
 .user-tabs {
@@ -593,6 +586,75 @@ input[type="checkbox"] {
   padding: 16px 30px;
   color: #afb6bf;
 }
+
+.user .follow-info {
+  padding: 8px 0 16px;
+}
+
+.user .followers, .user .following {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #212121;
+  text-decoration: none;
+}
+
+.user .followers {
+  border-right: 1px solid #9E9E9E;
+  padding-right: 16px;
+}
+
+.user .following {
+  padding-left: 16px;
+}
+
+.user .follow-count {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  color: #212121;
+  padding: 0 8px 0 0;
+}
+
+.follow-btn {
+  display: inline-block;
+  padding: 8px 32px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18.4px;
+  letter-spacing: 2px;
+}
+
+.follow {
+  display: none;
+  background-color: #3ECDC6;
+  color: #FFFFFF;
+}
+
+.unfollow {
+  color: #3ECDC6;
+  border: 1px solid #3ECDC6;
+  background-color: rgba(0,0,0,0);
+}
+
+.unfollow:hover {
+  color: #E75252;
+  background-color: rgba(231, 82, 82, 0.1);
+  border: 1px solid #E75252;
+}
+
+.unfollow span:nth-child(2) {
+  display: none;
+}
+
+.unfollow:hover span:nth-child(1) {
+  display: none;
+}
+
+.unfollow:hover span:nth-child(2) {
+  display: inline-block;
+}
+
 
 /* users/new, users/edit ================================ */
 .users-form input {
