@@ -85,3 +85,4 @@ export const getAllPosts = async (): Promise<PostWithUser[]> => {
   });
   return post;
 };
+
