@@ -7,88 +7,90 @@
         <p data-test="user-email"><%= user.email %></p>
       </div>
       <div class="follow-info">
-        <label for="followers" class="followers"><span class="follow-count">3</span>Followers</label>
-        <label for="following" class="following"><span class="follow-count">3</span>Following</label>
+        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=followers" class="followers"><span class="follow-count">3</span>Followers</a>
+        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=following" class="following"><span class="follow-count">3</span>Following</a>
       </div>
-      <div class="modal-contents">
-        <input type="radio" name="modal" id="close">
-        <input type="radio" name="modal" id="overlay" checked>
-        <div class="window">
-          <label for="overlay" class="overlay"></label>
-          <div class="inner">
-            <input type="radio" name="modal" id="followers" class="handle">
-              <div id="modal-1" class="wrap wrap-1">
-                <ul class="user-tabs">
-                  <div>
-                    <li class="active">
-                      <label for="followers">Followers</label>
-                    </li>
-                    <li >
-                      <label for="following">Following</label>
-                    </li>
+        <% if (isOpenModal) { %>
+          <div class="overlay">
+            <div class="modal">
+              <% if (activeTab === 'followers') { %>
+                <div class="inner">
+                  <div class="wrap">
+                    <ul class="user-tabs">
+                      <div>
+                        <li class="active">
+                          <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=followers">Followers</a>
+                        </li>
+                        <li >
+                          <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=following">Following</a>
+                        </li>
+                      </div>
+                      <a href="/users/<%= user.id %>" class="close"></a>
+                    </ul>
+                    <div class="users-index-item">
+                      <div class="user-left">
+                        <img src="<%= user.imageName %>">
+                      </div>
+                      <div class="user-right">
+                        <a href="/users/<%= user.id %>"><%= user.name %></a>
+                      
+                        <%# if(!hasfollow) { %>
+                          <form action="" method="POST">
+                            <button type="submit" class="follow-btn follow">Follow</button>
+                          </form>
+                        <%# } else { %>
+                          <form action="" method="POST">
+                            <button type="submit" class="follow-btn unfollow">
+                              <span>Following</span>
+                              <span>Unfollow</span>
+                            </button>
+                          </form>
+                        <%# } %> 
+                      </div>
+                    </div>
                   </div>
-                  <label for="close" class="close"></label>
-                </ul>
-                <div class="users-index-item">
-                  <div class="user-left">
-                    <img src="<%= user.imageName %>">
-                  </div>
-                  <div class="user-right">
-                    <a href="/users/<%= user.id %>"><%= user.name %></a>
-                  
-                    <%# if(!hasfollow) { %>
-                      <form action="" method="POST">
-                        <button type="submit" class="follow-btn follow">Follow</button>
-                      </form>
-                    <%# } else { %>
-                      <form action="" method="POST">
-                        <button type="submit" class="follow-btn unfollow">
-                          <span>Following</span>
-                          <span>Unfollow</span>
-                        </button>
-                      </form>
-                    <%# } %> 
-                  </div>         
                 </div>
-              </div>
-              <input type="radio" name="modal" id="following" class="handle">
-              <div id="modal-2" class="wrap wrap-2">
-                <ul class="user-tabs">
-                  <div>
-                    <li>
-                      <label for="followers">Followers</label>
-                    </li>
-                    <li class="active">
-                      <label for="following">Following</label>
-                    </li>
+              <% }else if (activeTab === 'following') { %>
+                <div class="inner">
+                  <div class="wrap">
+                    <ul class="user-tabs">
+                      <div>
+                        <li>
+                          <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=followers">Followers</a>
+                        </li>
+                        <li class="active">
+                          <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=following">Following</a>
+                        </li>
+                      </div>
+                      <a href="/users/<%= user.id %>" class="close"></a>
+                    </ul>
+                    <div class="users-index-item">
+                      <div class="user-left">
+                        <img src="<%= user.imageName %>">
+                      </div>
+                      <div class="user-right">
+                        <a href="/users/<%= user.id %>">Following</a>
+                      
+                        <%# if(!hasfollow) { %>
+                          <form action="" method="POST">
+                            <button type="submit" class="follow-btn follow">Follow</button>
+                          </form>
+                        <%# } else { %>
+                          <form action="" method="POST">
+                            <button type="submit" class="follow-btn unfollow">
+                              <span>Following</span>
+                              <span>Unfollow</span>
+                            </button>
+                          </form>
+                        <%# } %> 
+                      </div>         
+                    </div>
                   </div>
-                  <label for="close" class="close"></label>
-                </ul>
-                <div class="users-index-item">
-                  <div class="user-left">
-                    <img src="<%= user.imageName %>">
-                  </div>
-                  <div class="user-right">
-                    <a href="/users/<%= user.id %>">HELLO</a>
-                  
-                    <%# if(!hasfollow) { %>
-                      <form action="" method="POST">
-                        <button type="submit" class="follow-btn follow">Follow</button>
-                      </form>
-                    <%# } else { %>
-                      <form action="" method="POST">
-                        <button type="submit" class="follow-btn unfollow">
-                          <span>Following</span>
-                          <span>Unfollow</span>
-                        </button>
-                      </form>
-                    <%# } %> 
-                  </div>         
                 </div>
-              </div>
+              <% } %>
+            </div>
           </div>
-        </div>
-      </div>
+        <% } %>
       <% if(currentUser.id === user.id) { %>
         <a href="<%= `/users/${user.id}/edit` %>" class="user-edit">Edit</a>
       <% }else{ %>
