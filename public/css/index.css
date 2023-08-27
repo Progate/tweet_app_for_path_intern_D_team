@@ -710,12 +710,13 @@ input[type="checkbox"] {
   font-weight: 400;
   line-height: 18.4px;
   letter-spacing: 2px;
+  cursor: pointer;
 }
 
 .follow {
-  display: none;
   background-color: #3ECDC6;
   color: #FFFFFF;
+  border: none;
 }
 
 .unfollow {

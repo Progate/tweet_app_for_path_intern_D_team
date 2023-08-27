@@ -7,8 +7,8 @@
         <p data-test="user-email"><%= user.email %></p>
       </div>
       <div class="follow-info">
-        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=followers" class="followers"><span class="follow-count">3</span>Followers</a>
-        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=following" class="following"><span class="follow-count">3</span>Following</a>
+        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=followers" class="followers"><span class="follow-count"><%= followedCount %></span>Followers</a>
+        <a href="/users/<%= user.id %>?isOpenModal=true&activeTab=following" class="following"><span class="follow-count"><%= followingCount %></span>Following</a>
       </div>
         <% if (isOpenModal) { %>
           <div class="overlay">
@@ -34,18 +34,18 @@
                       <div class="user-right">
                         <a href="/users/<%= user.id %>"><%= user.name %></a>
                       
-                        <%# if(!hasfollow) { %>
-                          <form action="" method="POST">
+                        <% if(!hasFollow) { %>
+                          <form action="/users/follows/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn follow">Follow</button>
                           </form>
-                        <%# } else { %>
-                          <form action="" method="POST">
+                        <% } else { %>
+                          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
                             <button type="submit" class="follow-btn unfollow">
                               <span>Following</span>
                               <span>Unfollow</span>
                             </button>
                           </form>
-                        <%# } %> 
+                        <% } %> 
                       </div>
                     </div>
                   </div>
@@ -71,18 +71,18 @@
                       <div class="user-right">
                         <a href="/users/<%= user.id %>">Following</a>
                       
-                        <%# if(!hasfollow) { %>
-                          <form action="" method="POST">
+                        <% if(!hasFollow) { %>
+                          <form action="/users/follows/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn follow">Follow</button>
                           </form>
-                        <%# } else { %>
-                          <form action="" method="POST">
+                        <% } else { %>
+                          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
                             <button type="submit" class="follow-btn unfollow">
                               <span>Following</span>
                               <span>Unfollow</span>
                             </button>
                           </form>
-                        <%# } %> 
+                        <% } %> 
                       </div>         
                     </div>
                   </div>
@@ -94,18 +94,18 @@
       <% if(currentUser.id === user.id) { %>
         <a href="<%= `/users/${user.id}/edit` %>" class="user-edit">Edit</a>
       <% }else{ %>
-        <%# if(!hasfollow) { %>
-          <form action="" method="POST">
+        <% if(!hasFollow) { %>
+          <form action="/users/follows/<%= user.id %>" method="POST">
             <button type="submit" class="follow-btn follow">Follow</button>
           </form>
-        <%# } else { %>
-          <form action="" method="POST">
+        <% } else { %>
+          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
             <button type="submit" class="follow-btn unfollow">
               <span>Following</span>
               <span>Unfollow</span>
             </button>
           </form>
-        <%# } %>
+        <% } %>
       <% } %>
     </div>
     <ul class="user-tabs">
