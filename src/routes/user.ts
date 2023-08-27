@@ -18,10 +18,9 @@ import {
   forbidAuthUser,
 } from "@/middlewares/authentication";
 import {
-  getUserFollowedCount, 
-  getUserFollowingCount, 
+  getUserFollowedCount,
+  getUserFollowingCount,
   hasUserFollow,
-  createFollow,
 } from "@/models/follow";
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
