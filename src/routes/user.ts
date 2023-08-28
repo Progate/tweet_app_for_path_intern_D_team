@@ -17,6 +17,11 @@ import {
   ensureAuthUser,
   forbidAuthUser,
 } from "@/middlewares/authentication";
+import {
+  getUserFollowedCount,
+  getUserFollowingCount,
+  hasUserFollow,
+} from "@/models/follow";
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
@@ -63,7 +68,12 @@ userRouter.post(
 /** A page to show user details */
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+
   const userTimeline = await getUserPostTimeline(Number(userId));
+  const followedCount = await getUserFollowedCount(Number(userId));
+  const followingCount = await getUserFollowingCount(Number(userId));
+  const hasFollow = await hasUserFollow(Number(userId), Number(currentUserId));
   const isOpenModal = req.query.isOpenModal;
   const activeTab = req.query.activeTab;
   if (!userTimeline)
@@ -72,6 +82,9 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   res.render("users/show", {
     user,
     timeline,
+    followedCount,
+    followingCount,
+    hasFollow,
     isOpenModal,
     activeTab,
   });
