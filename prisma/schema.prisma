@@ -21,6 +21,8 @@ model User {
   posts Post[]
   likes Like[]
   retweets Retweet[]
+  followeds Follow[] @relation("followed")
+  followings Follow[] @relation("following")
   @@map("users")
 }
 
@@ -54,4 +56,14 @@ model Retweet {
   retweetedAt DateTime @map("retweeted_at") @default(now())
   @@id([userId, postId])
   @@map("retweets")
+}
+
+model Follow {
+  followed    User    @relation("followed", fields: [followedId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  followedId  Int     @map("followed_id") 
+  following    User    @relation("following", fields: [followingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  followingId  Int     @map("following_id") 
+  followedAt DateTime @map("followed_at") @default(now())
+  @@id([followedId, followingId])
+  @@map("follows")
 }
