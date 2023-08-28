@@ -35,11 +35,11 @@
                         <a href="/users/<%= user.id %>"><%= user.name %></a>
                       
                         <% if(!hasFollow) { %>
-                          <form action="/users/follows/<%= user.id %>" method="POST">
+                          <form action="/users/<%= user.id %>/follows?redirect=/users/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn follow">Follow</button>
                           </form>
                         <% } else { %>
-                          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
+                          <form action="/users/<%= user.id %>/follows?_method=DELETE&redirect=/users/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn unfollow">
                               <span>Following</span>
                               <span>Unfollow</span>
@@ -72,11 +72,11 @@
                         <a href="/users/<%= user.id %>">Following</a>
                       
                         <% if(!hasFollow) { %>
-                          <form action="/users/follows/<%= user.id %>" method="POST">
+                          <form action="/users/<%= user.id %>/follows?redirect=/users/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn follow">Follow</button>
                           </form>
                         <% } else { %>
-                          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
+                          <form action="/users/<%= user.id %>/follows?_method=DELETE&redirect=/users/<%= user.id %>" method="POST">
                             <button type="submit" class="follow-btn unfollow">
                               <span>Following</span>
                               <span>Unfollow</span>
@@ -95,11 +95,11 @@
         <a href="<%= `/users/${user.id}/edit` %>" class="user-edit">Edit</a>
       <% }else{ %>
         <% if(!hasFollow) { %>
-          <form action="/users/follows/<%= user.id %>" method="POST">
+          <form action="/users/<%= user.id %>/follows?redirect=/users/<%= user.id %>" method="POST">
             <button type="submit" class="follow-btn follow">Follow</button>
           </form>
         <% } else { %>
-          <form action="/users/follows/<%= user.id %>?_method=DELETE" method="POST">
+          <form action="/users/<%= user.id %>/follows?_method=DELETE&redirect=/users/<%= user.id %>" method="POST">
             <button type="submit" class="follow-btn unfollow">
               <span>Following</span>
               <span>Unfollow</span>
