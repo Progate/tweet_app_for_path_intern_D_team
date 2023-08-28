@@ -127,3 +127,10 @@ postRouter.delete(
     res.redirect("/posts");
   }
 );
+
+postRouter.get("/allposts", ensureAuthUser, async (req, res) => {
+  const timeline = await getAllPostTimeline();
+  res.render("posts/allposts", {
+    timeline,
+  });
+} );
