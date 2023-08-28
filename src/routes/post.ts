@@ -9,12 +9,23 @@ import {ensureAuthUser} from "@/middlewares/authentication";
 import {ensureOwnerOfPost} from "@/middlewares/current_user";
 export const postRouter = express.Router();
 
+postRouter.get("/allposts", ensureAuthUser, async (req, res) => {
+  const timeline = await getAllPostTimeline();
+  res.render("posts/allposts", {
+    timeline,
+  });
+} );
+
+
+
 postRouter.get("/", ensureAuthUser, async (req, res) => {
   const timeline = await getAllPostTimeline();
   res.render("posts/index", {
     timeline,
   });
 });
+
+
 
 postRouter.get("/new", ensureAuthUser, (req, res) => {
   res.render("posts/new", {
@@ -25,7 +36,7 @@ postRouter.get("/new", ensureAuthUser, (req, res) => {
   });
 });
 
-postRouter.get("/:postId", ensureAuthUser, async (req, res, next) => {
+postRouter.get("/allposts", ensureAuthUser, async (req, res, next) => {
   const {postId} = req.params;
   const post = await getPost(Number(postId));
   if (!post || !post.id)
