@@ -26,7 +26,6 @@ postRouter.get("/", ensureAuthUser, async (req, res) => {
 });
 
 
-
 postRouter.get("/new", ensureAuthUser, (req, res) => {
   res.render("posts/new", {
     post: {
@@ -36,7 +35,7 @@ postRouter.get("/new", ensureAuthUser, (req, res) => {
   });
 });
 
-postRouter.get("/allposts", ensureAuthUser, async (req, res, next) => {
+postRouter.get("/:postId", ensureAuthUser, async (req, res, next) => {
   const {postId} = req.params;
   const post = await getPost(Number(postId));
   if (!post || !post.id)
@@ -138,10 +137,3 @@ postRouter.delete(
     res.redirect("/posts");
   }
 );
-
-postRouter.get("/allposts", ensureAuthUser, async (req, res) => {
-  const timeline = await getAllPostTimeline();
-  res.render("posts/allposts", {
-    timeline,
-  });
-} );
