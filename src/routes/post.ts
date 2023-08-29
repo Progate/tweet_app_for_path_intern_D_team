@@ -14,9 +14,7 @@ postRouter.get("/allposts", ensureAuthUser, async (req, res) => {
   res.render("posts/allposts", {
     timeline,
   });
-} );
-
-
+});
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
   const timeline = await getAllPostTimeline();
@@ -24,7 +22,6 @@ postRouter.get("/", ensureAuthUser, async (req, res) => {
     timeline,
   });
 });
-
 
 postRouter.get("/new", ensureAuthUser, (req, res) => {
   res.render("posts/new", {
