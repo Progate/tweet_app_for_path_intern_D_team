@@ -738,9 +738,9 @@ input[type="checkbox"] {
 }
 
 .follow {
-  display: none;
   background-color: #3ecdc6;
   color: #ffffff;
+  border: none;
 }
 
 .unfollow {

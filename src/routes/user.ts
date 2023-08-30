@@ -131,7 +131,7 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const currentUserId = req.authentication?.currentUserId;
-  
+
   const userTimeline = await getUserLikesTimeline(Number(userId));
   const followedCount = await getUserFollowedCount(Number(userId));
   const followingCount = await getUserFollowingCount(Number(userId));
