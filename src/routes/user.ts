@@ -13,6 +13,13 @@ import {
   getUserLikesTimeline,
 } from "@/models/user_timeline";
 import {
+  getFollowedUsers,
+  getFollowingUsers,
+  getUserFollowedCount,
+  getUserFollowingCount,
+  hasUserFollow,
+} from "@/models/follow";
+import {
   isUniqueEmail,
   ensureAuthUser,
   forbidAuthUser,
@@ -63,26 +70,120 @@ userRouter.post(
 /** A page to show user details */
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+
   const userTimeline = await getUserPostTimeline(Number(userId));
+  const followedCount = await getUserFollowedCount(Number(userId));
+  const followingCount = await getUserFollowingCount(Number(userId));
+
+  // ユーザー詳細ページのユーザーとの関係
+  const hasFollow = await hasUserFollow(Number(userId), Number(currentUserId));
+  // モーダルやタブの状況によって必要なときだけ取得するようにすると良さそう
+  const followers = await getFollowedUsers(Number(userId));
+  const followersWithHasFollow = [];
+  for (const follower of followers) {
+    const followerWithHasFollow = {
+      following: {
+        ...follower.following,
+        hasFollow: await hasUserFollow(
+          Number(follower.following.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followersWithHasFollow.push(followerWithHasFollow);
+  }
+
+  const followings = await getFollowingUsers(Number(userId));
+  const followingsWithHasFollow = [];
+  for (const following of followings) {
+    const followingWithHasFollow = {
+      followed: {
+        ...following.followed,
+        hasFollow: await hasUserFollow(
+          Number(following.followed.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followingsWithHasFollow.push(followingWithHasFollow);
+  }
+
+  const isOpenModal = req.query.isOpenModal;
+  const activeTab = req.query.activeTab;
   if (!userTimeline)
     return next(new Error("Invalid error: The user is undefined."));
   const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
     timeline,
+    followedCount,
+    followingCount,
+    hasFollow,
+    followers: followersWithHasFollow,
+    followings: followingsWithHasFollow,
+    isOpenModal,
+    activeTab,
   });
 });
 
 /** A page to list all tweets liked by a user */
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+
   const userTimeline = await getUserLikesTimeline(Number(userId));
+  const followedCount = await getUserFollowedCount(Number(userId));
+  const followingCount = await getUserFollowingCount(Number(userId));
+
+  // ユーザー詳細ページのユーザーとの関係
+  const hasFollow = await hasUserFollow(Number(userId), Number(currentUserId));
+  // モーダルやタブの状況によって必要なときだけ取得するようにすると良さそう
+  const followers = await getFollowedUsers(Number(userId));
+  const followersWithHasFollow = [];
+  for (const follower of followers) {
+    const followerWithHasFollow = {
+      following: {
+        ...follower.following,
+        hasFollow: await hasUserFollow(
+          Number(follower.following.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followersWithHasFollow.push(followerWithHasFollow);
+  }
+
+  const followings = await getFollowingUsers(Number(userId));
+  const followingsWithHasFollow = [];
+  for (const following of followings) {
+    const followingWithHasFollow = {
+      followed: {
+        ...following.followed,
+        hasFollow: await hasUserFollow(
+          Number(following.followed.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followingsWithHasFollow.push(followingWithHasFollow);
+  }
+
+  const isOpenModal = req.query.isOpenModal;
+  const activeTab = req.query.activeTab;
   if (!userTimeline)
     return next(new Error("Invalid error: The user is undefined."));
   const {user, timeline} = userTimeline;
   res.render("users/likes", {
     user,
     timeline,
+    followedCount,
+    followingCount,
+    hasFollow,
+    followers: followersWithHasFollow,
+    followings: followingsWithHasFollow,
+    isOpenModal,
+    activeTab,
   });
 });
 
