@@ -13,15 +13,17 @@ import {
   getUserLikesTimeline,
 } from "@/models/user_timeline";
 import {
-  isUniqueEmail,
-  ensureAuthUser,
-  forbidAuthUser,
-} from "@/middlewares/authentication";
-import {
+  getFollowedUsers,
+  getFollowingUsers,
   getUserFollowedCount,
   getUserFollowingCount,
   hasUserFollow,
 } from "@/models/follow";
+import {
+  isUniqueEmail,
+  ensureAuthUser,
+  forbidAuthUser,
+} from "@/middlewares/authentication";
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
@@ -73,7 +75,40 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const userTimeline = await getUserPostTimeline(Number(userId));
   const followedCount = await getUserFollowedCount(Number(userId));
   const followingCount = await getUserFollowingCount(Number(userId));
+
+  // ユーザー詳細ページのユーザーとの関係
   const hasFollow = await hasUserFollow(Number(userId), Number(currentUserId));
+  // モーダルやタブの状況によって必要なときだけ取得するようにすると良さそう
+  const followers = await getFollowedUsers(Number(userId));
+  const followersWithHasFollow = [];
+  for (const follower of followers) {
+    const followerWithHasFollow = {
+      following: {
+        ...follower.following,
+        hasFollow: await hasUserFollow(
+          Number(follower.following.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followersWithHasFollow.push(followerWithHasFollow);
+  }
+
+  const followings = await getFollowingUsers(Number(userId));
+  const followingsWithHasFollow = [];
+  for (const following of followings) {
+    const followingWithHasFollow = {
+      followed: {
+        ...following.followed,
+        hasFollow: await hasUserFollow(
+          Number(following.followed.id),
+          Number(currentUserId)
+        ),
+      },
+    };
+    followingsWithHasFollow.push(followingWithHasFollow);
+  }
+
   const isOpenModal = req.query.isOpenModal;
   const activeTab = req.query.activeTab;
   if (!userTimeline)
@@ -85,6 +120,8 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
     followedCount,
     followingCount,
     hasFollow,
+    followers: followersWithHasFollow,
+    followings: followingsWithHasFollow,
     isOpenModal,
     activeTab,
   });
