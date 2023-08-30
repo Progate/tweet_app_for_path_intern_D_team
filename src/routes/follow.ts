@@ -10,6 +10,10 @@ followRouter.post(
   async (req, res, next) => {
     const {userId} = req.params;
     const redirectUrl = req.query.redirect;
+    if (typeof redirectUrl !== "string") {
+      return res.redirect("/");
+    }
+
     const currentUserId = req.authentication?.currentUserId;
     if (currentUserId === undefined) {
       // `ensureAuthUser` enforces `currentUserId` is not undefined.
@@ -20,7 +24,12 @@ followRouter.post(
       followingId: Number(currentUserId),
       followedId: Number(userId),
     });
-    res.redirect(String(redirectUrl));
+
+    const activeTab = req.query.activeTab;
+    if (activeTab) {
+      return res.redirect(redirectUrl + "&activeTab=" + activeTab);
+    }
+    res.redirect(redirectUrl);
   }
 );
 
@@ -30,6 +39,10 @@ followRouter.delete(
   async (req, res, next) => {
     const {userId} = req.params;
     const redirectUrl = req.query.redirect;
+    if (typeof redirectUrl !== "string") {
+      return res.redirect("/");
+    }
+
     const currentUserId = req.authentication?.currentUserId;
     if (currentUserId === undefined) {
       // `ensureAuthUser` enforces `currentUserId` is not undefined.
@@ -40,6 +53,11 @@ followRouter.delete(
       followingId: Number(currentUserId),
       followedId: Number(userId),
     });
-    res.redirect(String(redirectUrl));
+
+    const activeTab = req.query.activeTab;
+    if (activeTab) {
+      return res.redirect(redirectUrl + "&activeTab=" + activeTab);
+    }
+    res.redirect(redirectUrl);
   }
 );

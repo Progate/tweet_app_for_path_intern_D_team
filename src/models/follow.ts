@@ -1,5 +1,6 @@
 import {Follow} from "@prisma/client";
 import {databaseManager} from "@/db/index";
+import {UserWithoutPassword, selectUserColumnsWithoutPassword} from "./user";
 
 type FollowData = Pick<Follow, "followedId" | "followingId">;
 
@@ -62,4 +63,57 @@ export const hasUserFollow = async (
     },
   });
   return follow !== null;
+};
+
+export const getFollowedUsers = async (
+  followedId: number
+): Promise<Array<{followedAt: Date; following: UserWithoutPassword}>> => {
+  const prisma = databaseManager.getInstance();
+  const followers = await prisma.follow.findMany({
+    where: {
+      followedId,
+    },
+    select: {
+      following: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+      followedAt: true,
+    },
+    // TODO: 最近フォローした人順でsortしとくといいかもしれない
+    orderBy: {
+      followedAt: "desc",
+    },
+  });
+  /**
+   * select * from follows
+   * join users on users.user_id = follows.followed_id
+   * join users on users.user_id = follows.following_id
+   * where followed_id = {みたいユーザーID}
+   */
+  return followers;
+};
+
+export const getFollowingUsers = async (
+  followingId: number
+): Promise<Array<{followedAt: Date; followed: UserWithoutPassword}>> => {
+  const prisma = databaseManager.getInstance();
+  const followings = await prisma.follow.findMany({
+    where: {
+      followingId,
+    },
+    select: {
+      followed: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+      followedAt: true,
+    },
+    orderBy: {
+      followedAt: "desc",
+    },
+  });
+  return followings;
 };
